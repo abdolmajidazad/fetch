@@ -7,6 +7,8 @@
 <div id="post1"></div>
 <div id="post2"></div>
 <div id="get1"></div>
+<div id="delete1"></div>
+<div id="put1"></div>
 <script>
     const postUrl = '/post/fetch';
     let data = {
@@ -72,6 +74,12 @@
     var query = Object.keys(data)
         .map(k => esc(k) + '=' + esc(data[k]))
         .join('&');
+
+
+
+
+
+
     let getUrl  = `/get/fetch?${query}`;
     let requestGet = new Request(getUrl, {
         method: 'GET',
@@ -89,6 +97,53 @@
     }).catch(function(error) {
         console.log('error data get 1 : ', error.message);
         document.getElementById('get1').innerHTML = error.message;
+    });
+
+
+
+
+
+    //    ravesh aval baraye delete data ba fetch
+    let deleteUrl  = `/delete/fetch?${query}`;
+    let requestDelete = new Request(deleteUrl, {
+        method: 'DELETE',
+        headers: new Headers({
+            "Content-Type": "application/json"
+        })
+    });
+    fetch(requestDelete).then(function(response) {
+        if(response.ok) {
+            return response.json().then(resp=>resp);
+        }
+    }).then(function(resp) {
+        console.log("resp data delete 1: ", resp)
+        document.getElementById('delete1').innerHTML = `delete 1 : ${JSON.stringify(resp)}`;
+    }).catch(function(error) {
+        console.log('error data delete 1 : ', error.message);
+        document.getElementById('delete1').innerHTML = error.message;
+    });
+
+
+
+
+    //    ravesh aval baraye put data ba fetch
+    let putUrl  = `/put/fetch?${query}`;
+    let requestPut = new Request(putUrl, {
+        method: 'PUT',
+        headers: new Headers({
+            "Content-Type": "application/json"
+        })
+    });
+    fetch(requestPut).then(function(response) {
+        if(response.ok) {
+            return response.json().then(resp=>resp);
+        }
+    }).then(function(resp) {
+        console.log("resp data put 1: ", resp)
+        document.getElementById('put1').innerHTML = `put 1 : ${JSON.stringify(resp)}`;
+    }).catch(function(error) {
+        console.log('error data put 1 : ', error.message);
+        document.getElementById('put1').innerHTML = error.message;
     });
 
 </script>

@@ -12,7 +12,6 @@ app.post('/post/fetch', function(req, res) {
     console.log("params post: ", req.body);
     res.json(req.body);
     // res.status(500).send({ error: "boo:(" });
-
 });
 
 
@@ -20,9 +19,18 @@ app.post('/post/fetch', function(req, res) {
 app.get('/get/fetch', function(req, res) {
     console.log("params get: ", req.query);
     res.json(req.query);
+});
+
+app.delete('/delete/fetch', function(req, res) {
+    console.log("params delete: ", req.query);
+    res.json(req.query);
+});
 
 
 
+app.put('/put/fetch', function(req, res) {
+    console.log("params put: ", req.query);
+    res.json(req.query);
 });
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
 
