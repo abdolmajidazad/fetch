@@ -1,6 +1,6 @@
 <html>
 <head>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sails.io.js/1.1.13/sails.io.js"></script>
 </head>
 <body>
 
@@ -9,8 +9,37 @@
 <div id="get1"></div>
 <div id="delete1"></div>
 <div id="put1"></div>
+
+<button onclick="getData()">test</button>
 <script>
-    const postUrl = '/post/fetch';
+//    https://github.com/balderdashy/sails.io.js
+    io.sails.url = 'http://localhost:7000';
+    io.sails.autoConnect = true;
+    io.sails.initialConnectionHeaders = {nosession: true};
+    io.sails.headers = {
+        "x-csrf-token": "someToken",
+    };
+    io.sails.transports = ['websocket'];
+    io.sails.rejectUnauthorized = false;
+
+
+    io.socket.on('connect',()=>{
+        console.log("connect");
+    });
+
+    io.socket.on('disconnect',()=>{
+        console.log("disconnect");
+    });
+
+    io.socket.on('reconnect',()=>{
+        console.log("reconnect");
+    });
+
+
+
+
+    const server = 'http://localhost:7000';
+    const postUrl = `${server}/post/fetch`;
     let data = {
             "startDate": "1396/09/26",
             "endDate": "1396/10/03",
@@ -44,6 +73,9 @@
 
 
 
+
+
+
     //    ravesh dovom baraye post data ba fetch
     let requestPost = new Request(postUrl, {
         method: 'POST',
@@ -69,7 +101,7 @@
 
 
 
-    //    ravesh aval baraye get data ba fetch
+//        ravesh aval baraye get data ba fetch
     var esc = encodeURIComponent;
     var query = Object.keys(data)
         .map(k => esc(k) + '=' + esc(data[k]))
@@ -80,7 +112,10 @@
 
 
 
-    let getUrl  = `/get/fetch?${query}`;
+
+
+
+    let getUrl  = `${server}/get/fetch?${query}`;
     let requestGet = new Request(getUrl, {
         method: 'GET',
         headers: new Headers({
@@ -102,9 +137,8 @@
 
 
 
-
     //    ravesh aval baraye delete data ba fetch
-    let deleteUrl  = `/delete/fetch?${query}`;
+    let deleteUrl  = `${server}/delete/fetch?${query}`;
     let requestDelete = new Request(deleteUrl, {
         method: 'DELETE',
         headers: new Headers({
@@ -127,7 +161,7 @@
 
 
     //    ravesh aval baraye put data ba fetch
-    let putUrl  = `/put/fetch?${query}`;
+    let putUrl  = `${server}/put/fetch?${query}`;
     let requestPut = new Request(putUrl, {
         method: 'PUT',
         headers: new Headers({
@@ -145,6 +179,34 @@
         console.log('error data put 1 : ', error.message);
         document.getElementById('put1').innerHTML = error.message;
     });
+
+
+
+
+
+let socketData = {...data, "socket" : true};
+io.socket.post(`${server}/postSocket/fetch`, socketData, function(response) {
+    console.log('post response', response)
+});
+
+
+
+function getData(){
+    io.socket.get(`${server}/getSocket/fetch`, socketData, function(response) {
+        console.log('get response', response)
+    });
+}
+
+getData()
+
+io.socket.put(`${server}/putSocket/fetch`, socketData, function(response) {
+    console.log('put response', response)
+});
+
+
+io.socket.delete(`${server}/deleteSocket/fetch`, socketData, function(response) {
+    console.log('delete response', response)
+});
 
 </script>
 </body>
