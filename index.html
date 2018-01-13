@@ -4,6 +4,7 @@
 </head>
 <body>
 
+<h1 id="socket-connection"></h1>
 <div id="post1"></div>
 <div id="post2"></div>
 <div id="get1"></div>
@@ -12,39 +13,6 @@
 
 <button onclick="getData()">test</button>
 <script>
-//    https://github.com/balderdashy/sails.io.js
-
-    io.sails.url = 'http://localhost:7000';
-    io.sails.autoConnect = true;
-    io.sails.reconnection = true;
-    io.sails.initialConnectionHeaders = {nosession: true};
-    io.sails.headers = {
-        "x-csrf-token": "someToken",
-    };
-    io.sails.transports = ['websocket'];
-    io.sails.rejectUnauthorized = false;
-    io.socket.on ('connect',()=> console.log( 'connected'));
-    io.socket.on ('reconnect',()=> console.log( 'reconnect'));
-    io.socket.on ('connecting',()=> console.log( 'connecting'));
-    io.socket.on ('reconnecting',()=> console.log( 'reconnecting'));
-    io.socket.on ('connect_failed',()=> console.log( 'connect failed'));
-    io.socket.on ('reconnect_failed',()=> console.log( 'reconnect failed'));
-    io.socket.on ('close',()=> console.log( 'close'));
-    io.socket.on ('disconnect',()=> console.log( 'disconnect'));
-
-//
-//    io.socket.on('connect',()=>{
-//        console.log("connect");
-//    });
-//
-//    io.socket.on('disconnect',()=>{
-//        console.log("disconnect");
-//    });
-//
-//    io.socket.on('reconnect',()=>{
-//        console.log("reconnect");
-//    });
-
 
 
 
@@ -194,29 +162,54 @@
 
 
 
-let socketData = {...data, "socket" : true};
-io.socket.post(`${server}/postSocket/fetch`, socketData, function(response) {
-    console.log('post response', response)
-});
 
 
 
-function getData(){
-    io.socket.get(`${server}/getSocket/fetch`, socketData, function(response) {
-        console.log('get response', response)
+    //    https://github.com/balderdashy/sails.io.js
+
+
+    const socketDom = document.getElementById('socket-connection');
+    io.sails.url = 'http://localhost:7000';
+    io.sails.autoConnect = true;
+    io.sails.reconnection = true;
+    io.sails.initialConnectionHeaders = {nosession: true};
+    io.sails.headers = {
+        "x-csrf-token": "someToken",
+    };
+    io.sails.transports = ['websocket'];
+    io.sails.rejectUnauthorized = false;
+    io.socket.on ('connect',()=> {console.log( 'connected') ; socketDom.innerHTML='connected'});
+    io.socket.on ('reconnect',()=> {console.log( 'reconnect'); socketDom.innerHTML='reconnect...'});
+    io.socket.on ('connecting',()=> {console.log( 'connecting'); socketDom.innerHTML='connecting'});
+    io.socket.on ('reconnecting',()=> {console.log( 'reconnecting'); socketDom.innerHTML='reconnecting...'});
+    io.socket.on ('connect_failed',()=> {console.log( 'connect failed'); socketDom.innerHTML='connect failed'});
+    io.socket.on ('reconnect_failed',()=> {console.log( 'reconnect failed'); socketDom.innerHTML='reconnect failed'});
+    io.socket.on ('close',()=> {console.log( 'close'); socketDom.innerHTML='close'});
+    io.socket.on ('disconnect',()=> {console.log( 'disconnect'); socketDom.innerHTML='disconnect'});
+
+    let socketData = {...data, "socket" : true};
+    io.socket.post(`${server}/postSocket/fetch`, socketData, function(response) {
+        console.log('post response', response)
     });
-}
-
-getData()
-
-io.socket.put(`${server}/putSocket/fetch`, socketData, function(response) {
-    console.log('put response', response)
-});
 
 
-io.socket.delete(`${server}/deleteSocket/fetch`, socketData, function(response) {
-    console.log('delete response', response)
-});
+
+    function getData(){
+        io.socket.get(`${server}/getSocket/fetch`, socketData, function(response) {
+            console.log('get response', response)
+        });
+    }
+
+    getData()
+
+    io.socket.put(`${server}/putSocket/fetch`, socketData, function(response) {
+        console.log('put response', response)
+    });
+
+
+    io.socket.delete(`${server}/deleteSocket/fetch`, socketData, function(response) {
+        console.log('delete response', response)
+    });
 
 </script>
 </body>
