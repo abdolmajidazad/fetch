@@ -4,7 +4,9 @@
 </head>
 <body>
 
-
+<div id="post1"></div>
+<div id="post2"></div>
+<div id="get1"></div>
 <script>
     const postUrl = '/post/fetch';
     let data = {
@@ -28,8 +30,10 @@
         }
     }).then(function(resp) {
         console.log("resp data post 1: ", resp)
+        document.getElementById('post1').innerHTML = `post 1 : ${JSON.stringify(resp)}`;
     }).catch(function(error) {
         console.log('error data post 1 : ', error.message);
+        document.getElementById('post1').innerHTML = error.message;
     });
 
 
@@ -52,8 +56,10 @@
         }
     }).then(function(resp) {
         console.log("resp data post 2: ", resp)
+        document.getElementById('post2').innerHTML = `post 2 : ${JSON.stringify(resp)}`;
     }).catch(function(error) {
         console.log('error data post 2 : ', error.message);
+        document.getElementById('post2').innerHTML = error.message;
     });
 
 
@@ -79,8 +85,10 @@
         }
     }).then(function(resp) {
         console.log("resp data get 1: ", resp)
+        document.getElementById('get1').innerHTML = `get 1 : ${JSON.stringify(resp)}`;
     }).catch(function(error) {
         console.log('error data get 1 : ', error.message);
+        document.getElementById('get1').innerHTML = error.message;
     });
 
 </script>
