@@ -13,27 +13,37 @@
 <button onclick="getData()">test</button>
 <script>
 //    https://github.com/balderdashy/sails.io.js
+
     io.sails.url = 'http://localhost:7000';
     io.sails.autoConnect = true;
+    io.sails.reconnection = true;
     io.sails.initialConnectionHeaders = {nosession: true};
     io.sails.headers = {
         "x-csrf-token": "someToken",
     };
     io.sails.transports = ['websocket'];
     io.sails.rejectUnauthorized = false;
+    io.socket.on ('connect',()=> console.log( 'connected'));
+    io.socket.on ('reconnect',()=> console.log( 'reconnect'));
+    io.socket.on ('connecting',()=> console.log( 'connecting'));
+    io.socket.on ('reconnecting',()=> console.log( 'reconnecting'));
+    io.socket.on ('connect_failed',()=> console.log( 'connect failed'));
+    io.socket.on ('reconnect_failed',()=> console.log( 'reconnect failed'));
+    io.socket.on ('close',()=> console.log( 'close'));
+    io.socket.on ('disconnect',()=> console.log( 'disconnect'));
 
-
-    io.socket.on('connect',()=>{
-        console.log("connect");
-    });
-
-    io.socket.on('disconnect',()=>{
-        console.log("disconnect");
-    });
-
-    io.socket.on('reconnect',()=>{
-        console.log("reconnect");
-    });
+//
+//    io.socket.on('connect',()=>{
+//        console.log("connect");
+//    });
+//
+//    io.socket.on('disconnect',()=>{
+//        console.log("disconnect");
+//    });
+//
+//    io.socket.on('reconnect',()=>{
+//        console.log("reconnect");
+//    });
 
 
 
